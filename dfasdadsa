@@ -1,0 +1,18 @@
+CREATE DATABASE IF NOT EXISTS gestor_contrasena;
+USE gestor_contrasena;
+
+CREATE TABLE baul (
+    id_baul INT NOT NULL AUTO_INCREMENT,
+    plataforma VARCHAR(80) NOT NULL,
+    usuario VARCHAR(80) NOT NULL,
+    clave TEXT NOT NULL,
+    PRIMARY KEY (id_baul), 
+    UNIQUE KEY plataforma_usuario (plataforma, usuario)
+) ENGINE=InnoDB AUTO_INCREMENT=57 DEFAULT CHARSET=utf8;
+
+INSERT INTO baul (plataforma, usuario, clave) VALUES
+('Facebook', 'usuario1', 'clave123'),
+('Instagram', 'usuario2', 'clave456'),
+('Twitter', 'usuario1', 'clave789'),
+('Gmail', 'correo@gmail.com', 'claveABC'),
+('LinkedIn', 'usuario3', 'claveDEF');
