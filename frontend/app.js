@@ -1,102 +1,110 @@
-function consulta_general() {
-    let url = "http://127.0.0.1:5000/"; 
-    fetch(url)
+function obtener_clientes() {
+    fetch("http://127.0.0.1:5000/api/clientes")
         .then(response => response.json())
-        .then(data => visualizar(data))
+        .then(data => visualizarClientes(data))
         .catch(error => console.log(error));
-
-    let b = "";
-    const visualizar = (data) => {
-        console.log(data);
-        for (let i = 0; i < data.baul.length; i++) {
-            b += `<tr>
-                    <td>${data.baul[i].id_baul}</td>
-                    <td>${data.baul[i].Plataforma}</td>
-                    <td>${data.baul[i].usuario}</td>
-                    <td>${data.baul[i].clave}</td>
-                    <td>
-                    <button type='button' class='btn btn-info' onclick="location.href = 'edit.html?variableB=${data.baul[i].id_baul}'">
-                        <i class="fas fa-edit" style="font-size: 30px;"></i>
-                    </button>
-                    <button type='button' class='btn btn-warning' onclick="eliminar(${data.baul[i].id_baul})">
-                        <i class="fas fa-trash-alt" style="font-size: 30px;"></i>
-                    </button>
-                </td>
-                  </tr>`;
-        }
-        document.getElementById('data').innerHTML = b;
-    }
 }
 
+function visualizarClientes(data) {
+    let b = "";
+    for (let i = 0; i < data.clientes.length; i++) {
+        b += `<tr>
+                <td>${data.clientes[i].id_cliente}</td>
+                <td>${data.clientes[i].nombre}</td>
+                <td>${data.clientes[i].telefono}</td>
+                <td>${data.clientes[i].direccion}</td>
+                <td>${data.clientes[i].correo}</td>
+                <td>${data.clientes[i].fecha_registro}</td>
+                <td>
+                    <button type='button' class='btn btn-info' onclick="location.href = 'editclientes.html?id_cliente=${data.clientes[i].id_cliente}'"> 
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button type='button' class='btn btn-warning' onclick="eliminar_cliente(${data.clientes[i].id_cliente})"> 
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </td>
+              </tr>`;
+    }
+    document.getElementById('data').innerHTML = b;
+}
 
-function eliminar(id_baul) {
-    fetch(`http://127.0.0.1:5000/eliminar/${id_baul}`, {
-        method: 'DELETE',  
+function eliminar_cliente(id_cliente) {
+    fetch(`http://127.0.0.1:5000/api/clientes/${id_cliente}`, {
+        method: 'DELETE',
         headers: {
             "Content-Type": "application/json"
         }
     })
-    .then(response => response.json())  
+    .then(response => response.json())
     .then(data => {
-        
-        if (data.mensaje === "") {
-            
+        if (data.mensaje === 'Cliente eliminado') {
             Swal.fire({
                 title: "¡Eliminado!",
-                text: "El registro se eliminó exitosamente.",
-                icon: "success"  
+                text: "El cliente ha sido eliminado exitosamente.",
+                icon: "success"
             }).then(() => {
-                consulta_general();  
+                obtener_clientes();
             });
         } else {
-            
-            Swal.fire('ELIMINADO', data.mensaje, 'error');
+            Swal.fire('Error', data.mensaje, 'error');
         }
-  
-    
     })
     .catch(error => {
         console.error('Error al eliminar:', error);
-        
-        Swal.fire('Error', 'Hubo un problema al intentar eliminar el registro.', 'error');
+        Swal.fire('Error', 'Hubo un problema al intentar eliminar el cliente.', 'error');
     });
-    
-
-    
 }
 
-var id = getParameterByName('variableB');
-consulta_individual(id);
 
-
-function getParameterByName(name) {
-    name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
-    var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
-        results = regex.exec(location.search);
-    return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
-}
-
-function consulta_individual(id) {
-    fetch(`http://127.0.0.1:5000/consulta_individual/${id}`)
+function obtener_cliente(id_cliente) {
+    fetch(`http://127.0.0.1:5000/api/clientes/${id_cliente}`)
         .then(response => response.json())
         .then(data => {
-            document.getElementById("Plataforma").value = data.baul.Plataforma;
-            document.getElementById("usuario").value = data.baul.usuario;
-            document.getElementById("clave").value = data.baul.clave;
+            if (data.cliente) {
+                document.getElementById("nombre").value = data.cliente.nombre;
+                document.getElementById("telefono").value = data.cliente.telefono;
+                document.getElementById("direccion").value = data.cliente.direccion;
+                document.getElementById("correo").value = data.cliente.correo;
+                document.getElementById("fecha_registro").value = data.cliente.fecha_registro;
+            } else {
+                Swal.fire('Error', 'Cliente no encontrado', 'error');
+            }
         });
 }
 
-function guardar() {
-    const plataforma = document.getElementById('Plataforma').value;
-    const usuario = document.getElementById('usuario').value;
-    const clave = document.getElementById('clave').value;
+// Obtener el id_cliente de la URL
+const urlParams = new URLSearchParams(window.location.search);
+const id_cliente = urlParams.get('id_cliente');
 
-    fetch(`http://127.0.0.1:5000/actualizar/${id}`, {
+// Función para actualizar el cliente
+function actualizar_cliente() {
+    // Obtener los valores de los campos del formulario
+    const nombre = document.getElementById('nombre').value;
+    const telefono = document.getElementById('telefono').value;
+    const direccion = document.getElementById('direccion').value;
+    const correo = document.getElementById('correo').value;
+    const fecha_registro = document.getElementById('fecha_registro').value;
+
+    // Verificar que se ha obtenido el id_cliente de la URL
+    if (!id_cliente) {
+        Swal.fire({
+            title: 'Error',
+            text: 'No se ha proporcionado un id_cliente válido en la URL.',
+            icon: 'error',
+            confirmButtonText: 'Aceptar'
+        });
+        return;
+    }
+
+    // Hacer la solicitud PUT para actualizar el cliente
+    fetch(`http://127.0.0.1:5000/api/clientes/${id_cliente}`, {
         method: 'PUT',
         body: JSON.stringify({
-            plataforma: plataforma,
-            usuario: usuario,
-            clave: clave
+            nombre: nombre,
+            telefono: telefono,
+            direccion: direccion,
+            correo: correo,
+            fecha_registro: fecha_registro
         }),
         headers: {
             "Content-Type": "application/json"
@@ -104,19 +112,16 @@ function guardar() {
     })
     .then(response => response.json())
     .then(data => {
-        if (data.mensaje === 'Registro actualizado') {
-            // Muestra el SweetAlert cuando la actualización es exitosa
+        if (data.mensaje === 'Cliente actualizado') {
             Swal.fire({
                 title: "¡Editado exitosamente!",
-                text: "El registro se ha editado correctamente.",
+                text: "El cliente ha sido actualizado correctamente.",
                 icon: "success",
                 confirmButtonText: "Aceptar"
             }).then(() => {
-                // Redirige a la página principal después de confirmar
-                location.href = 'index.html';
+                location.href = 'clientes.html'; // Redirigir a la lista de clientes
             });
         } else {
-            // Si hay algún mensaje de error, se muestra un SweetAlert de error
             Swal.fire({
                 title: 'Error al editar',
                 text: data.mensaje,
@@ -126,27 +131,31 @@ function guardar() {
         }
     })
     .catch(error => {
-        // Si ocurre un error al hacer la petición, se muestra un SweetAlert de error
         Swal.fire({
             title: 'Error',
-            text: 'Hubo un problema al intentar editar el registro.',
+            text: 'Hubo un problema al intentar editar el cliente.',
             icon: 'error',
             confirmButtonText: 'Aceptar'
         });
     });
 }
 
-function registrar() {
-    const plataforma = document.getElementById('Plataforma').value;
-    const usuario = document.getElementById('usuario').value;
-    const clave = document.getElementById('clave').value;
 
-    fetch("http://127.0.0.1:5000/registro/", {
+function crear_cliente() {
+    const nombre = document.getElementById('nombre').value;
+    const telefono = document.getElementById('telefono').value;
+    const direccion = document.getElementById('direccion').value;
+    const correo = document.getElementById('correo').value;
+    const fecha_registro = document.getElementById('fecha_registro').value;
+
+    fetch("http://127.0.0.1:5000/api/clientes", {
         method: 'POST',
         body: JSON.stringify({
-            plataforma: plataforma,
-            usuario: usuario,
-            clave: clave
+            nombre: nombre,
+            telefono: telefono,
+            direccion: direccion,
+            correo: correo,
+            fecha_registro: fecha_registro
         }),
         headers: {
             "Content-Type": "application/json"
@@ -154,18 +163,16 @@ function registrar() {
     })
     .then(response => response.json())
     .then(data => {
-        // Usamos SweetAlert en lugar de alert
         Swal.fire({
-            icon: 'success', // O puedes usar 'error', 'warning', etc.
+            icon: 'success',
             title: '¡Registro exitoso!',
             text: data.mensaje,
             confirmButtonText: 'Aceptar'
         }).then(() => {
-            location.href = 'index.html';
+            location.href = 'Clientes.html'; // Redirigir al listado de clientes
         });
     })
     .catch(error => {
-        // Si hay un error, mostramos una alerta de error
         Swal.fire({
             icon: 'error',
             title: 'Oops...',

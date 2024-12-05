@@ -1,144 +1,136 @@
-/* Estilos generales del cuerpo */
+/* Body general */
 body {
-  font-family: 'Arial', Helvetica, sans-serif;
-  line-height: 1.6;
-  background-image: url('https://img.freepik.com/vector-gratis/abstact-fondo-hexagonal-estilo-memphis_1017-31955.jpg?t=st=173099');  /* Imagen de fondo */
-  background-size: cover;  /* Hace que la imagen cubra todo el fondo */
-  background-position: center center;  /* Centra la imagen en la página */
-  background-attachment: fixed;  /* La imagen permanece fija mientras se hace scroll */
-  color: #212121;  /* Texto oscuro para buen contraste */
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(45deg, rgba(74, 131, 232, 1) 0%, rgba(37, 59, 102, 1) 100%);
+  color: #fff;
   margin: 0;
   padding: 0;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;  /* Establece la altura de la ventana del navegador */
-  text-align: center;
+  height: 100vh;
+  flex-direction: column;
 }
 
-/* Contenedor principal */
-#main {
-  margin: 0 auto;
-  padding: 30px;
-  max-width: 1200px;
-  background-color: rgba(255, 255, 255, 0.9);  /* Fondo blanco translúcido para mejorar la legibilidad */
-  border-radius: 15px;
-  box-shadow: 0px 12px 24px rgba(0, 0, 0, 0.2);
+/* Navbar */
+.navbar {
+  background-color: #222;
+  border-bottom: 2px solid #f7d400;
+  position: fixed;
   width: 100%;
-  box-sizing: border-box;
-  text-align: left;  /* Alineación de texto hacia la izquierda dentro del contenedor */
+  top: 0;
+  z-index: 1000;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
-/* Títulos */
-h1.rr {
-  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
-  color: #388E3C;  /* Verde para los encabezados */
-  font-size: 36px;
+.navbar-brand {
+  font-size: 1.8em;
+  font-weight: bold;
+  letter-spacing: 1px;
+  color: #fff;
+}
+
+.navbar-nav .nav-link {
+  font-size: 1.1em;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-right: 15px;
+  transition: color 0.3s ease;
+  color: #fff;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #f7d400 !important;
+}
+
+/* Padding to prevent navbar from overlapping content */
+#main {
+  margin-top: 80px; /* Adjust this value if needed */
+  background-color: rgba(0, 0, 0, 0.6);
+  border-radius: 15px;
+  padding: 30px;
+  max-width: 800px;
+  width: 100%;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+/* Estilo del encabezado */
+h1 {
+  font-size: 2.5em;
+  text-align: center;
+  margin-bottom: 30px;
+  font-family: 'Comic Sans MS', sans-serif;
+  color: #f7d400;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  animation: glow 1.5s infinite alternate;
+}
+
+/* Animación de "glow" en el título */
+@keyframes glow {
+  0% {
+      text-shadow: 0 0 10px #f7d400, 0 0 20px #f7d400, 0 0 30px #f7d400, 0 0 40px #ff7700;
+  }
+  100% {
+      text-shadow: 0 0 20px #f7d400, 0 0 30px #f7d400, 0 0 40px #f7d400, 0 0 50px #ff7700;
+  }
+}
+
+/* Estilo de botones */
+button {
+  font-size: 1.1em;
+  padding: 10px 20px;
+  margin: 10px 0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+}
+
+.btn-info {
+  background-color: #1e7e34;
+  border: none;
+}
+
+.btn-info:hover {
+  background-color: #155d27;
+}
+
+.btn-warning {
+  background-color: #f39c12;
+  border: none;
+}
+
+.btn-warning:hover {
+  background-color: #e67e22;
+}
+
+/* Estilo del formulario */
+.form-group {
   margin-bottom: 20px;
 }
 
-/* Estilo para las tablas */
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: 30px;
-  background-color: rgba(255, 255, 255, 0.9);  /* Fondo blanco translúcido */
-  border-radius: 8px;
-  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-}
-
-.table th, .table td {
-  padding: 15px;
-  text-align: left;
-  border-bottom: 1px solid #e0e0e0;
-}
-
-.table th {
-  background-color: #4CAF50;  /* Fondo verde en los encabezados */
-  color: white;
-}
-
-.table tbody tr:hover {
-  background-color: #e8f5e9;  /* Color suave al pasar el ratón por encima de las filas */
-}
-
-/* Botones */
-.button {
-  background-color: #FF9800;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  transition: background-color 0.3s ease, transform 0.2s ease;
-  border: none;
-  margin-top: 15px;
-}
-
-.button:hover {
-  background-color: #FF5722;  /* Naranja más oscuro al pasar el cursor */
-  transform: scale(1.05);  /* Efecto de agrandamiento cuando el ratón pasa por encima */
-}
-
-.button:focus {
-  outline: none;  /* Quita el contorno al hacer clic en el botón */
-}
-
-/* Estilos para los labels */
-label {
-  font-weight: bold;
-  padding: 8px;
-  font-size: 16px;
-  color: #388E3C;  /* Verde oscuro para los labels */
-}
-
-/* Tarjetas o cuadros de contenido */
-.targeta {
-  padding: 25px;
-  background-color: #ffffff;
-  border-radius: 12px;
-  box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.targeta:hover {
-  transform: translateY(-5px);  /* Sube ligeramente al pasar el cursor */
-  box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-.targeta h2 {
-  color: #388E3C;  /* Títulos en verde */
-  font-size: 28px;
-  margin-bottom: 15px;
-}
-
-.targeta p {
-  color: #666;  /* Color de texto gris para párrafos */
-  font-size: 18px;
-  line-height: 1.6;
-}
-
-/* Estilo de las alertas de SweetAlert */
-.swal2-popup {
-  font-family: 'Arial', Helvetica, sans-serif;
-  background-color: #ffffff;
-  border-radius: 10px;
-  padding: 20px;
-}
-
-.swal2-title {
-  font-size: 22px;
-  font-weight: bold;
-  color: #388E3C;  /* Verde para los títulos de las alertas */
-}
-
-.swal2-confirm {
-  background-color: #4CAF50;  /* Verde para el botón de confirmación */
-  color: white;
+.form-control {
+  background-color: #f4f4f4;
+  border: 1px solid #ccc;
+  padding: 10px;
+  font-size: 1em;
   border-radius: 5px;
+  transition: border-color 0.3s ease;
 }
 
-.swal2-confirm:hover {
-  background-color: #388E3C;  /* Verde más oscuro al pasar el cursor */
+.form-control:focus {
+  border-color: #f7d400;
+  box-shadow: 0 0 5px rgba(255, 199, 0, 0.8);
+}
+
+/* Estilo para el contenedor principal */
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
 }
